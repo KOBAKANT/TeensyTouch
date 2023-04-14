@@ -225,7 +225,7 @@ void loop() {
 
 
    // print sensor values
-  printSensorVal();
+  //printSensorVal();
   delay(10);
 
 }
