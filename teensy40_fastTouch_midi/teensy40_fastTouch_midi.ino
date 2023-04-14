@@ -41,7 +41,7 @@ int avg7;
 int avg8;
 
 int samplesize = 5; // how much samples to take avarage, change if needed
-int thresh = 5; // threshold to trigger MIDI notes, change if needed
+int thresh = 3; // threshold to trigger MIDI notes, change if needed
 
 boolean key1;
 boolean key2;
@@ -65,10 +65,18 @@ boolean lastkey8;
 const int channel = 1;
 
 void setup() {
-  // put your setup code here, to run once:
+  // initiate the serial communication
   SerialUSB.begin(9600);
+  
+  // turn on the onboard LED
+  pinMode(13, OUTPUT);
+  digitalWrite(13, HIGH);
+
+  // reset all the MIDI note velocity to zero
   allNotesZero();
+  
   delay(100);
+  // read the initial touch sensor value. this functions as base point
   initval1 = fastTouchRead(5);
   initval2 = fastTouchRead(7);
   initval3 = fastTouchRead(9);
@@ -77,12 +85,14 @@ void setup() {
   initval6 = fastTouchRead(16);
   initval7 = fastTouchRead(18);
   initval8 = fastTouchRead(20);
+  
   delay(100);
-  pinMode(13, OUTPUT);
+  // turn off the onboard LED
+  digitalWrite(13, LOW);
 }
 
 void loop() {
-  // read touch sensor pins, pins are for TeensyLC touch pins
+  // read touch sensor pins
   val1 = fastTouchRead(5);
   val2 = fastTouchRead(7);
   val3 = fastTouchRead(9);
@@ -104,113 +114,150 @@ void loop() {
   avg7 = (avg7 * (samplesize - 1) + val7) / samplesize;
   avg8 = (avg8 * (samplesize - 1) + val8) / samplesize;
 
-  // store the previous value to compare
+  // store the previous key state to lastKey to compare for edge ditection
   storeLastKeyState();
 
-  if (avg1 > initval1+thresh) {key1 = true;} 
-  else {key1 = false;}
-  if (avg2 > initval2+thresh) {key2 = true;} 
-  else {key2 = false;}
-  if (avg3 > initval3+thresh) {key3 = true;} 
-  else {key3 = false;}
-  if (avg4 > initval4+thresh) {key4 = true;} 
-  else {key4 = false;}
-  if (avg5 > initval5+thresh) {key5 = true;} 
-  else {key5 = false;}
-  if (avg6 > initval6+thresh) {key6 = true;} 
-  else {key6 = false;}
-  if (avg7 > initval7+thresh) {key7 = true;} 
-  else {key7 = false;}
-  if (avg8 > initval8+thresh) {key8 = true;} 
-  else {key8 = false;}
+// check if the smoothed value goes above the initialValue + threshold 
+  if (avg1 > initval1 + thresh) {
+    key1 = true; // someone is touching
+  }
+  else {
+    key1 = false; // no one is touching
+  }
+  if (avg2 > initval2 + thresh) {
+    key2 = true;
+  }
+  else {
+    key2 = false;
+  }
+  if (avg3 > initval3 + thresh) {
+    key3 = true;
+  }
+  else {
+    key3 = false;
+  }
+  if (avg4 > initval4 + thresh) {
+    key4 = true;
+  }
+  else {
+    key4 = false;
+  }
+  if (avg5 > initval5 + thresh) {
+    key5 = true;
+  }
+  else {
+    key5 = false;
+  }
+  if (avg6 > initval6 + thresh) {
+    key6 = true;
+  }
+  else {
+    key6 = false;
+  }
+  if (avg7 > initval7 + thresh) {
+    key7 = true;
+  }
+  else {
+    key7 = false;
+  }
+  if (avg8 > initval8 + thresh) {
+    key8 = true;
+  }
+  else {
+    key8 = false;
+  }
 
 
   if (key1 != lastkey1) {
     if (key1 == true) {
+      // send note with velocity 99 to the connected device/computer
       usbMIDI.sendNoteOn(note1, 99, channel);
-      digitalWrite(13,HIGH);
+      // turn on onboardLED as an indicator
+      digitalWrite(13, HIGH);
     }
     if (key1 == false) {
+      // send note with velocity 0 to the connected device/computer
       usbMIDI.sendNoteOn(note1, 0, channel);
-      digitalWrite(13,LOW);
+      // turn off onboardLED as an indicator
+      digitalWrite(13, LOW);
     }
   }
 
   if (key2 != lastkey2) {
     if (key2 == true) {
       usbMIDI.sendNoteOn(note2, 99, channel);
-      digitalWrite(13,HIGH);
+      digitalWrite(13, HIGH);
     }
     if (key2 == false) {
       usbMIDI.sendNoteOn(note2, 0, channel);
-      digitalWrite(13,LOW);
+      digitalWrite(13, LOW);
     }
   }
 
   if (key3 != lastkey3) {
     if (key3 == true) {
       usbMIDI.sendNoteOn(note3, 99, channel);
-      digitalWrite(13,HIGH);
+      digitalWrite(13, HIGH);
     }
     if (key3 == false) {
       usbMIDI.sendNoteOn(note3, 0, channel);
-      digitalWrite(13,LOW);
+      digitalWrite(13, LOW);
     }
   }
   if (key4 != lastkey4) {
     if (key4 == true) {
       usbMIDI.sendNoteOn(note4, 99, channel);
-      digitalWrite(13,HIGH);
+      digitalWrite(13, HIGH);
     }
     if (key4 == false) {
       usbMIDI.sendNoteOn(note4, 0, channel);
-      digitalWrite(13,LOW);
+      digitalWrite(13, LOW);
     }
   }
   if (key5 != lastkey5) {
     if (key5 == true) {
       usbMIDI.sendNoteOn(note5, 99, channel);
-      digitalWrite(13,HIGH);
+      digitalWrite(13, HIGH);
     }
     if (key5 == false) {
       usbMIDI.sendNoteOn(note5, 0, channel);
-      digitalWrite(13,LOW);
+      digitalWrite(13, LOW);
     }
   }
   if (key6 != lastkey6) {
     if (key6 == true) {
       usbMIDI.sendNoteOn(note6, 99, channel);
-      digitalWrite(13,HIGH);
+      digitalWrite(13, HIGH);
     }
     if (key6 == false) {
       usbMIDI.sendNoteOn(note6, 0, channel);
-      digitalWrite(13,LOW);
+      digitalWrite(13, LOW);
     }
   }
   if (key7 != lastkey7) {
     if (key7 == true) {
       usbMIDI.sendNoteOn(note7, 99, channel);
-      digitalWrite(13,HIGH);
+      digitalWrite(13, HIGH);
     }
     if (key7 == false) {
       usbMIDI.sendNoteOn(note7, 0, channel);
-      digitalWrite(13,LOW);
+      digitalWrite(13, LOW);
     }
   }
   if (key8 != lastkey8) {
     if (key8 == true) {
       usbMIDI.sendNoteOn(note8, 99, channel);
-      digitalWrite(13,HIGH);
+      digitalWrite(13, HIGH);
     }
     if (key8 == false) {
       usbMIDI.sendNoteOn(note8, 0, channel);
-      digitalWrite(13,LOW);
+      digitalWrite(13, LOW);
     }
   }
 
 
 
-   // print sensor values
+  // print touch sensor values to serial port
   printSensorVal();
   delay(10);
 
@@ -226,10 +273,10 @@ void storeLastKeyState() {
   lastkey6 = key6;
   lastkey7 = key7;
   lastkey8 = key8;
-  
+
 }
 
-void printSensorVal(){
+void printSensorVal() {
   SerialUSB.print(avg1);
   SerialUSB.print(" ");
   SerialUSB.print(avg2);
@@ -246,10 +293,10 @@ void printSensorVal(){
   SerialUSB.print(" ");
   SerialUSB.print(avg8);
   SerialUSB.println();
-  
+
 }
 
-void allNotesZero(){
+void allNotesZero() {
   usbMIDI.sendNoteOn(note1, 0, channel);
   usbMIDI.sendNoteOn(note2, 0, channel);
   usbMIDI.sendNoteOn(note3, 0, channel);
