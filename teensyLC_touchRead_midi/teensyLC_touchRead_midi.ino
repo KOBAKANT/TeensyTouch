@@ -225,7 +225,7 @@ void loop() {
 
 
    // print sensor values
-  //printSensorVal();
+  printSensorVal();
   delay(10);
 
 }
@@ -261,6 +261,7 @@ void printSensorVal(){
   Serial.print(avg8);
   Serial.print(" ");
   Serial.print(avg9);
+  Serial.print(" ");
   Serial.println();
   
 }

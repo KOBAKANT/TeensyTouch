@@ -2,7 +2,7 @@
 
 // MIDI note here, change if you like
 
-int note1 = 60;
+int note1 = 50;
 int note2 = 62;
 int note3 = 64;
 int note4 = 65;
