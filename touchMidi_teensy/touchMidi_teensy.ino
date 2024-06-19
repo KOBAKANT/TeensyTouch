@@ -77,10 +77,10 @@ void setup() {
   
   delay(100);
   // read the initial touch sensor value. this functions as base point
-  initval1 = fastTouchRead(5);
-  initval2 = fastTouchRead(7);
-  initval3 = fastTouchRead(9);
-  initval4 = fastTouchRead(11);
+  initval1 = fastTouchRead(4);
+  initval2 = fastTouchRead(6);
+  initval3 = fastTouchRead(8);
+  initval4 = fastTouchRead(10);
   initval5 = fastTouchRead(15);
   initval6 = fastTouchRead(17);
   initval7 = fastTouchRead(19);
